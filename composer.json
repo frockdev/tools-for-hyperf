@@ -1,0 +1,25 @@
+{
+  "name": "frock-dev/tools-for-hyperf",
+  "description": "Toolkit to boost your development with Hyperf and frock.dev",
+  "autoload": {
+    "psr-4": {
+      "FrockDev\\ToolsForHyperf\\": "src/"
+    }
+  },
+  "require": {
+    "nette/php-generator": "^4.0",
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "grpc/grpc": "v1.57.0",
+    "spatie/laravel-data": "3.9.2",
+    "jonahgeorge/jaeger-client-php": "1.5.0",
+    "basis-company/nats": "^0.14.0",
+    "google/protobuf": "3.25.1",
+    "swoole/ide-helper": "^5.0",
+    "phpstan/phpstan": "^1.0"
+  },
+  "extra": {
+    "hyperf": {
+      "config": "FrockDev\\ToolsForHyperf\\ConfigProvider"
+    }
+  }
+}
