@@ -6,7 +6,6 @@ use FrockDev\ToolsForHyperf\Commands\AddGeneratedNamespacesToComposerJson;
 use FrockDev\ToolsForHyperf\Commands\AddToArrayToGrpcObjects;
 use FrockDev\ToolsForHyperf\Commands\CreateEndpointsFromProto;
 use FrockDev\ToolsForHyperf\Commands\PrepareProtoFiles;
-use FrockDev\ToolsForHyperf\Commands\SendEchoToNats;
 use FrockDev\ToolsForHyperf\Listeners\NatsRunListener;
 use FrockDev\ToolsForHyperf\NatsJetstream\NatsJetstreamGrpcDriver;
 use Hyperf\HttpServer\CoreMiddleware;
@@ -21,7 +20,6 @@ class ConfigProvider
                 AddGeneratedNamespacesToComposerJson::class,
                 AddToArrayToGrpcObjects::class,
                 CreateEndpointsFromProto::class,
-                SendEchoToNats::class,
             ],
             'dependencies'=>[
                 NatsDriver::class=>NatsJetstreamGrpcDriver::class,
