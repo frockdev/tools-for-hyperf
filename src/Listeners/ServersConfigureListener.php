@@ -5,6 +5,8 @@ namespace FrockDev\ToolsForHyperf\Listeners;
 use FrockDev\ToolsForHyperf\Annotations\Grpc;
 use FrockDev\ToolsForHyperf\Annotations\Http;
 use FrockDev\ToolsForHyperf\Annotations\Nats;
+use FrockDev\ToolsForHyperf\Annotations\NatsJetstream;
+use FrockDev\ToolsForHyperf\NatsJetstream\NatsConsumerManager;
 use FrockDev\ToolsForHyperf\Servers\HttpProtobufServer;
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ContainerInterface;
@@ -104,7 +106,8 @@ class ServersConfigureListener  implements ListenerInterface
             && (env('APP_MODE')=='http' || env('APP_MODE')=='all');
         $needGrpc = count(AnnotationCollector::getClassesByAnnotation(Grpc::class))>0
             && (env('APP_MODE')=='grpc' || env('APP_MODE')=='all');
-        $needNats = count(AnnotationCollector::getClassesByAnnotation(Nats::class))>0
+        $needNats = ((count(AnnotationCollector::getClassesByAnnotation(Nats::class))>0)
+                || (count(AnnotationCollector::getClassesByAnnotation(NatsJetstream::class))>0))
             && (env('APP_MODE')=='nats' || env('APP_MODE')=='all');
 
         /** @var ConfigInterface $config */
@@ -165,11 +168,14 @@ class ServersConfigureListener  implements ListenerInterface
         ////nats
         $natsConfigArray = $config->get('natsJetstream');
         $foundConfigIndex = false;
-        foreach ($natsConfigArray as $natsName=>$natsConfig) {
-            if ($natsName === 'jetstream') {
-                $foundConfigIndex = $natsName;
+        if ($natsConfigArray) {
+            foreach ($natsConfigArray as $natsName=>$natsConfig) {
+                if ($natsName === 'jetstream') {
+                    $foundConfigIndex = $natsName;
+                }
             }
         }
+
         if ($needNats) {
             $natsConfig = $this->getNatsTemplate();
             if ($foundConfigIndex!==false) {
@@ -178,7 +184,7 @@ class ServersConfigureListener  implements ListenerInterface
                 }
                 $natsConfigArray[$foundConfigIndex] = $natsConfig;
             } else {
-                $natsConfigArray[] = $natsConfig;
+                $natsConfigArray['jetstream'] = $natsConfig;
             }
         } else {
             unset($natsConfigArray[$foundConfigIndex]);
@@ -195,5 +201,16 @@ class ServersConfigureListener  implements ListenerInterface
 
         $config->set('server', $serverConfig);
 
+        $this->runNatsListeners();
+    }
+
+    private function runNatsListeners() {
+        $needNats = ((count(AnnotationCollector::getClassesByAnnotation(Nats::class))>0)
+                || (count(AnnotationCollector::getClassesByAnnotation(NatsJetstream::class))>0))
+            && (env('APP_MODE')=='nats' || env('APP_MODE')=='all');
+        if ($needNats) {
+            $consumerManager = $this->container->get(NatsConsumerManager::class);
+            $consumerManager->run();
+        }
     }
 }

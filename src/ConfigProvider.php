@@ -6,7 +6,6 @@ use FrockDev\ToolsForHyperf\Commands\AddGeneratedNamespacesToComposerJson;
 use FrockDev\ToolsForHyperf\Commands\AddToArrayToGrpcObjects;
 use FrockDev\ToolsForHyperf\Commands\CreateEndpointsFromProto;
 use FrockDev\ToolsForHyperf\Commands\PrepareProtoFiles;
-use FrockDev\ToolsForHyperf\Listeners\NatsRunListener;
 use FrockDev\ToolsForHyperf\Listeners\ServersConfigureListener;
 
 class ConfigProvider
@@ -23,7 +22,6 @@ class ConfigProvider
 
             ],
             'listeners'=>[
-                NatsRunListener::class,
                 ServersConfigureListener::class,
             ]
         ];
