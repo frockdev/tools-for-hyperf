@@ -13,6 +13,7 @@ namespace FrockDev\ToolsForHyperf\Middlewares;
 
 use Closure;
 use FastRoute\Dispatcher;
+use FrockDev\ToolsForHyperf\Routes\HttpProtobufDispatcherFactory;
 use Google\Protobuf\Internal\Message;
 use Hyperf\Codec\Json;
 use Hyperf\Context\Context;
@@ -117,7 +118,7 @@ class HttpProtobufCoreMiddleware implements CoreMiddlewareInterface
 
     protected function createDispatcher(string $serverName): Dispatcher
     {
-        $factory = $this->container->get(DispatcherFactory::class);
+        $factory = $this->container->get(HttpProtobufDispatcherFactory::class);
         return $factory->getDispatcher($serverName);
     }
 

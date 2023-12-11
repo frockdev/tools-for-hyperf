@@ -17,7 +17,7 @@ class GrpcDispatcherFactory extends DispatcherFactory
         Router::addServer('grpc', function () use ($grpcControllers) {
             foreach ($grpcControllers as $class=>$controller) {
                 $route = $class::GRPC_ROUTE;
-                Router::post('/'.$route, $class.'@__invoke');
+                Router::post('/'.ltrim($route, '/'), $class.'@__invoke');
             }
         });
     }

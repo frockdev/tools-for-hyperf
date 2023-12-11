@@ -9,7 +9,6 @@ use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ConnectionInterface;
 use Hyperf\Engine\Channel;
 use Hyperf\Logger\LoggerFactory;
-use Hyperf\Nats\Exception\DriverException;
 use Hyperf\Pool\SimplePool\Pool;
 use Psr\Container\ContainerInterface;
 use Hyperf\Pool\SimplePool\PoolFactory;
